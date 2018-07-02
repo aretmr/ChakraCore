@@ -3,7 +3,8 @@
 // Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
 //-------------------------------------------------------------------------------------------------------
 #pragma once
-
+#include <unordered_map>
+#include <functional>
 namespace IR
 {
     class LabelInstr;

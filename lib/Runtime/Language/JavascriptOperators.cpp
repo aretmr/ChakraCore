@@ -807,10 +807,17 @@ using namespace Js;
     BOOL JavascriptOperators::StrictEqual(Var aLeft, Var aRight, ScriptContext* requestContext)
     {
         JIT_HELPER_REENTRANT_HEADER(Op_StrictEqual);
+
+        static std::unordered_map<int, std::function<BOOL(Var aLeft, Var aRight)>> cmpFcnTable =
+        {
+            { TypeIds_String * 10 + TypeIds_String, [=](Var a, Var b) -> BOOL { return JavascriptString::Equals(JavascriptString::UnsafeFromVar(aLeft), JavascriptString::UnsafeFromVar(aRight)); }
+            }
+        }
+
         double dblLeft, dblRight;
         TypeId rightType, leftType;
         leftType = JavascriptOperators::GetTypeId(aLeft);
-
+        
         // Because NaN !== NaN, we may not return TRUE when typeId is Number
         if (aLeft == aRight && leftType != TypeIds_Number) return TRUE;
 
